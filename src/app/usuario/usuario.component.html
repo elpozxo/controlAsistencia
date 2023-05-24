@@ -1,0 +1,140 @@
+<div class="row">
+    <div class="col-12 mt-2">
+        <form [formGroup]="formulario1">
+            <div class="row">
+                <div class="col-3">
+                    <button class="btn btn-primary d-flex justify-content-center" type="button"
+                        (click)="openEditModal(editModal, null)">
+                        <span class="material-icons">add</span>
+                        Agregar Persona
+                    </button>
+                </div>
+                <div class="col-6">
+                    <div class="input-group">
+                        <label for="buscar" class="input-group-text">Buscar :</label>
+                        <input type="text" id="buscar" class="form-control" formControlName="searchQuery"
+                            (keyup.enter)="consultarUser()">
+                        <button class="btn btn-primary" (click)="consultarUser()">
+                            <samp class="material-icons">search</samp>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <select class="form-control" formControlName="searchBy">
+                        <option value="documento">Documento</option>
+                        <option value="nombre">Nombre</option>
+                        <option value="apellido">Apellido</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="col-12 mt-3">
+        <div class="table-responsive">
+            <ngx-datatable class="table table-hover" [rows]="data" [columns]="columns" [headerHeight]="50"
+                [footerHeight]="50" [rowHeight]="'auto'" [columnMode]="'force'">
+            </ngx-datatable>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #editButtonTemplate let-row="row">
+    <button class="btn btn-primary btn-editar" (click)="openEditModal(editModal, row)">
+        <samp class="material-icons">edit</samp>
+    </button>
+    <button class="btn btn-danger btn-editar" (click)="eliminar(row)">
+        <samp class="material-icons">delete</samp>
+    </button>
+</ng-template> 
+
+<ng-template #editModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{text}} Persona</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body"> 
+        <form [formGroup]="formulario" (ngSubmit)="guardarCambios()">
+            <div class="form-group row mt-1">
+                <label for="documento" class="col-5">Documento</label>
+                <div class="col-7">
+                    <input type="number" id="documento" formControlName="documento" class="form-control">
+                    <div *ngIf="formulario.get('documento')?.hasError('required')" class="error">Campo obligatorio</div>
+                    <div *ngIf="formulario.get('documento')?.hasError('pattern')" class="error">Solo se permiten números
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="tipoDocumento" class="col-5">Tipo de Documento</label>
+                <div class="col-7">
+                    <select class="form-control" formControlName="tipoDocumento">
+                        <option value="Cedula">Cedula</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <div *ngIf="formulario.get('tipoDocumento')?.hasError('required')" class="error">Campo obligatorio
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="primerNombre" class="col-5">Primer Nombre</label>
+                <div class="col-7">
+                    <input type="text" id="primerNombre" formControlName="primerNombre" class="form-control">
+                    <div *ngIf="formulario.get('primerNombre')?.hasError('required')" class="error">Campo obligatorio
+                    </div>
+                    <div *ngIf="formulario.get('primerNombre')?.hasError('pattern')" class="error">Solo se permiten
+                        letras</div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="primerApellido" class="col-5">Primer Apellido</label>
+                <div class="col-7">
+                    <input type="text" id="primerApellido" formControlName="primerApellido" class="form-control">
+                    <div *ngIf="formulario.get('primerApellido')?.hasError('required')" class="error">Campo obligatorio
+                    </div>
+                    <div *ngIf="formulario.get('primerApellido')?.hasError('pattern')" class="error">Solo se permiten
+                        letras</div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="telefono" class="col-5">Teléfono</label>
+                <div class="col-7">
+                    <input type="number" id="telefono" formControlName="telefono" class="form-control">
+                    <div *ngIf="formulario.get('telefono')?.hasError('required')" class="error">Campo obligatorio</div>
+                    <div *ngIf="formulario.get('telefono')?.hasError('pattern')" class="error">Solo se permiten números
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="sexo" class="col-5">Sexo</label>
+                <div class="col-7">
+                    <select class="form-control" formControlName="sexo">
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Prefiero no decirlo">Prefiero no decirlo</option>
+                    </select>
+                    <div *ngIf="formulario.get('sexo')?.hasError('required')" class="error">Campo obligatorio</div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="correo" class="col-5">Correo</label>
+                <div class="col-7">
+                    <input type="email" id="correo" formControlName="correo" class="form-control">
+                    <div *ngIf="formulario.get('correo')?.hasError('required')" class="error">Campo obligatorio</div>
+                    <div *ngIf="formulario.get('correo')?.hasError('email')" class="error">Correo inválido</div>
+                </div>
+            </div>
+            <div class="form-group row mt-1">
+                <label for="foto" class="col-5">Foto</label>
+                <div class="col-7">
+                    <input type="text" id="foto" formControlName="foto" class="form-control">
+                </div>
+            </div> 
+            <button type="submit" class="btn btn-primary mt-3">Guardar cambios</button>
+        </form> 
+    </div>
+</ng-template>
